@@ -47,5 +47,11 @@ def read_from_h5_group(fname, dirpath='/', index_cols=0):
     return pd.concat(ddd, axis=1)
     
 
-
+def write_to_hdf5_group(fname, df, dirpath='/'):
+    """
+    """
+    with h5py.File(fname, 'w') as f:
+        f.attrs.update(session_metadata)
+        for cols in df.columns.droplevel(-1).drop_duplicates():
+            f.create_dataset(name=dirpath + '/'.join(cols), data=df[cols].to_records())
 
